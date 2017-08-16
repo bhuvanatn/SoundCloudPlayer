@@ -1,15 +1,16 @@
 // search
 var search = {};
-search.inputtext = function() {
-    // document.querySelector('search-results').innerHTML = ""; // empting the search result before adding with new one.
-    document.querySelector('.input-search').addEventListener('click', function(e) {
+search.inputtext = function () {
+    document.querySelector('.input-search').addEventListener('click', function (e) {
         var input = document.querySelector('.input-search').value;
-        document.querySelector('search-results').innerHTML = ""; //    empting the search result before adding with new one.
+        document.querySelector('.search-results').innerHTML = "";
         console.log("I am in input click", input);
+
         SoundCloudAPI.getTrack(input);
     });
-    document.querySelector('.input-search').addEventListener('keyup', function(e) {
+    document.querySelector('.input-search').addEventListener('keyup', function (e) {
         var input = document.querySelector('.input-search').value;
+        document.querySelector('.search-results').innerHTML = "";
         console.log("I am in keyup");
         SoundCloudAPI.getTrack(input);
     });
@@ -18,7 +19,7 @@ search.inputtext = function() {
 search.inputtext();
 
 var SoundCloudAPI = {};
-SoundCloudAPI.init = function() {
+SoundCloudAPI.init = function () {
     SC.initialize({
         client_id: 'cd9be64eeb32d1741c17cb39e41d254d'
     });
@@ -26,17 +27,17 @@ SoundCloudAPI.init = function() {
 SoundCloudAPI.init();
 // find all sounds of buskers licensed under 'creative commons share alike'
 
-SoundCloudAPI.getTrack = function(input) {
+SoundCloudAPI.getTrack = function (input) {
     SC.get('/tracks', {
-        q: input || 'buskers'
-    }).then(function(tracks) {
-        console.log("I am track",tracks);
+        q: input || 'Kettyperry'
+    }).then(function (tracks) {
+        console.log("I am track", tracks);
         SoundCloudAPI.renderTrack(tracks);
     });
 };
 SoundCloudAPI.getTrack();
-SoundCloudAPI.renderTrack = function(tracks) {
-    tracks.forEach(function(track) {
+SoundCloudAPI.renderTrack = function (tracks) {
+    tracks.forEach(function (track) {
 
         var card = document.createElement('div');
         card.classList.add("card");
@@ -75,7 +76,7 @@ SoundCloudAPI.renderTrack = function(tracks) {
         lastdiv.appendChild(itag);
         lastdiv.appendChild(span);
 
-        lastdiv.addEventListener('click', function() {
+        lastdiv.addEventListener('click', function () {
             SoundCloudAPI.embed(track.permalink_url);
         });
 
@@ -88,12 +89,12 @@ SoundCloudAPI.renderTrack = function(tracks) {
     });
 };
 
-SoundCloudAPI.embed = function(trackURL) {
+SoundCloudAPI.embed = function (trackURL) {
     SC.oEmbed(trackURL, {
         auto_play: false,
         maxheight: '100%',
         maxwidth: '100%'
-    }).then(function(embed) {
+    }).then(function (embed) {
         var sidebar = document.querySelector('.js-playlist');
         var box = document.createElement('div');
         box.innerHTML = embed.html;
